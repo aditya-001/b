@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color" content="#ffe5ef">
+
+<title>For You, My Love ♡</title>
+
+<style>
+
+:root{--pink:#ff8fb8;--deep:#d94f88;--glass:rgba(255,255,255,.34);--memory-loop-duration:180s}
+
+*{box-sizing:border-box}
+
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+
+body{font-family:Georgia,"Times New Roman",serif;color:#8f3e63;background:linear-gradient(135deg,#fff0f5 0%,#ffe1ed 48%,#ffd5e7 100%);position:relative}
+
+.background-glow{position:fixed;inset:0;overflow:hidden;pointer-events:none}
+
+.glow{position:absolute;border-radius:50%;filter:blur(5px);opacity:.6;animation:drift 13s ease-in-out infinite alternate}
+
+.glow.one{width:42vw;height:42vw;background:rgba(255,255,255,.55);top:-17vw;left:-8vw}
+
+.glow.two{width:36vw;height:36vw;background:rgba(255,161,197,.36);right:-12vw;bottom:-16vw;animation-delay:-4s}
+
+.glow.three{width:24vw;height:24vw;background:rgba(255,255,255,.45);right:14vw;top:8vh;animation-delay:-7s}
+
+#hearts{position:fixed;inset:0;overflow:hidden;pointer-events:none}
+
+.heart{position:absolute;bottom:-50px;color:rgba(225,83,139,.55);font-size:clamp(14px,2vw,28px);animation:floatUp linear forwards;filter:drop-shadow(0 4px 8px rgba(207,78,132,.12))}
+
+main{position:relative;z-index:1;width:100%;height:100%;display:grid;place-items:center;padding:24px}
+
+.landing{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(18px,3vh,30px);width:100%;height:100%;animation:fadeIn 1.2s ease both}
+
+.eyebrow{font:600 11px/1.4 Arial,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#b45a7e;opacity:.8}
+
+.centerpiece{width:min(52vh,36vw,430px);aspect-ratio:1;display:grid;place-items:center;position:relative}
+
+.orbit{position:absolute;inset:4%;border:1px solid rgba(255,255,255,.65);border-radius:50%;animation:rotate 35s linear infinite}
+
+.orbit:before,.orbit:after{content:"✦";position:absolute;color:#fff;font-size:17px;text-shadow:0 0 12px #ff9fc5}
+
+.orbit:before{top:9%;left:17%}.orbit:after{bottom:13%;right:11%;font-size:12px}
+
+.orbit.inner{inset:12%;border-style:dashed;opacity:.55;animation-direction:reverse;animation-duration:48s}
+
+.love-button{width:min(34vh,23vw,280px);height:min(34vh,23vw,280px);min-width:210px;min-height:210px;border:1px solid rgba(255,255,255,.9);border-radius:50%;background:radial-gradient(circle at 28% 22%,rgba(255,255,255,.83),rgba(255,255,255,.35) 55%,rgba(255,255,255,.2));box-shadow:0 20px 65px rgba(205,88,139,.17),inset 0 2px 16px rgba(255,255,255,.7);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:13px;cursor:pointer;color:#a3446e;transition:transform .35s ease,box-shadow .35s ease;position:relative;z-index:2}
+
+.love-button:hover{transform:translateY(-5px) scale(1.025);box-shadow:0 26px 75px rgba(205,88,139,.26),inset 0 2px 16px rgba(255,255,255,.8)}
+
+.love-button:focus-visible{outline:3px solid #d94f88;outline-offset:7px}
+
+.button-heart{font-size:clamp(30px,4vw,43px);line-height:1;color:#e77ca7;animation:heartbeat 2s ease-in-out infinite}
+
+.button-copy{font-size:clamp(16px,1.6vw,21px);line-height:1.35;max-width:180px}
+
+.button-copy span{display:block;font-style:italic;font-size:1.22em;color:#c14f80}
+
+.hint{font:11px Arial,sans-serif;letter-spacing:.12em;color:#ad6382;opacity:.8}
+
+.signature{position:absolute;bottom:clamp(22px,5vh,44px);font-style:italic;font-size:clamp(13px,1.2vw,16px);color:#b55c80;opacity:.85}
+
+.video-screen{position:fixed;z-index:10;inset:0;background:radial-gradient(ellipse at center,#fff0f6 0%,#f9c7dd 100%);display:none;align-items:center;justify-content:center;padding:5vh 5vw}
+
+.video-screen.active{display:flex;animation:fadeIn .7s ease both}
+
+.video-frame{position:relative;width:min(90vw,160vh);height:min(90vh,56.25vw);display:flex;align-items:center;justify-content:center;border-radius:18px;overflow:hidden;box-shadow:0 25px 90px rgba(130,43,83,.25),0 0 0 1px rgba(255,255,255,.75);background:#2c1822}
+
+video{display:block;width:100%;height:100%;object-fit:contain;background:#2c1822}
+
+.close-video{position:fixed;top:clamp(14px,3vh,28px);right:clamp(14px,3vw,30px);z-index:12;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.8);background:rgba(255,255,255,.6);color:#9d426b;font:24px Arial,sans-serif;cursor:pointer;backdrop-filter:blur(10px)}
+
+.close-video:hover{background:#fff}
+
+.video-caption{position:fixed;bottom:2vh;left:0;right:0;text-align:center;color:#9e4b70;font-style:italic;font-size:14px;pointer-events:none}
+
+@keyframes floatUp{0%{transform:translateY(0) rotate(0deg) scale(.7);opacity:0}10%{opacity:.75}90%{opacity:.5}100%{transform:translateY(-115vh) rotate(35deg) scale(1.15);opacity:0}}
+
+@keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.13)}}
+
+@keyframes rotate{to{transform:rotate(360deg)}}
+
+@keyframes drift{to{transform:translate(3vw,3vh) scale(1.08)}}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+@media(max-width:700px){main{padding:18px}.centerpiece{width:min(82vw,430px)}.love-button{width:min(64vw,270px);height:min(64vw,270px);min-width:220px;min-height:220px}.eyebrow{font-size:10px}.signature{bottom:24px}.video-screen{padding:3vw}.video-frame{width:94vw;height:auto;max-height:84vh;aspect-ratio:auto}.video-frame video{max-height:84vh}.video-caption{bottom:1vh;font-size:12px}}
+
+@media(max-height:620px) and (min-width:701px){.landing{gap:10px}.centerpiece{width:min(45vh,33vw,330px)}.love-button{width:min(31vh,21vw,230px);height:min(31vh,21vw,230px);min-width:180px;min-height:180px}.signature{bottom:12px}.eyebrow{font-size:10px}}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
+
+
+/* Memories gallery */
+
+.memories-screen{position:fixed;inset:0;z-index:20;display:none;overflow:hidden;background:linear-gradient(145deg,#fff0f6 0%,#ffe2ed 52%,#ffd8e8 100%);align-items:center;justify-content:center}
+
+.memories-screen.active{display:flex;animation:fadeIn .8s ease both}
+
+.memories-heading{position:absolute;top:7vh;left:0;right:0;text-align:center;z-index:3;color:#a84e76}
+
+.memories-heading h1{font-weight:400;font-size:clamp(30px,4vw,52px);margin:0 0 10px;font-style:italic}
+
+.memories-heading p{font:11px Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase;margin:0;opacity:.75}
+
+.memory-wire{position:absolute;top:49%;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,rgba(176,119,140,.55) 8%,rgba(176,119,140,.55) 92%,transparent);box-shadow:0 2px 5px rgba(163,86,119,.13)}
+
+.memory-track{position:absolute;left:0;top:calc(49% - 118px);display:flex;align-items:center;gap:0;width:max-content;animation:wireMoveRight var(--memory-loop-duration) linear infinite;will-change:transform}
+
+.memory-track:hover{animation-play-state:paused}
+
+.memory-set{display:flex;align-items:center;gap:38px;width:max-content;padding-right:38px}
+
+.memory-card{position:relative;flex:0 0 220px;width:220px;height:236px;padding:10px 10px 28px;background:#fff;border:1px solid rgba(255,255,255,.95);box-shadow:0 12px 28px rgba(170,94,127,.18);transform:rotate(var(--tilt,-2deg));transition:transform .35s ease,box-shadow .35s ease;border-radius:2px;display:block;text-decoration:none;color:inherit;font:inherit;text-align:inherit;cursor:zoom-in}
+
+.memory-card:nth-child(even){--tilt:2deg;transform:translateY(-22px) rotate(2deg)}
+
+.memory-card:nth-child(3n){--tilt:-3deg;transform:translateY(15px) rotate(-3deg)}
+
+.memory-card:hover{transform:translateY(-12px) rotate(0) scale(1.06);box-shadow:0 22px 38px rgba(170,94,127,.25);z-index:4}
+
+.memory-card:focus-visible{outline:3px solid #d94f88;outline-offset:5px}
+
+.memory-photo{width:100%;height:100%;background:linear-gradient(135deg,#fce4ed,#f8c6dc);display:flex;align-items:flex-end;justify-content:flex-start;overflow:hidden;color:#cc7b9f;font-size:36px;position:relative;padding:14px;border:1px solid rgba(255,255,255,.85);box-shadow:inset 0 0 0 1px rgba(255,255,255,.24)}
+
+.memory-photo img{width:100%;height:100%;object-fit:cover;display:block}
+
+.memory-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(77,30,61,.18));pointer-events:none}
+
+.frame-badge{position:absolute;top:12px;left:12px;z-index:1;padding:5px 8px;border-radius:999px;background:rgba(255,255,255,.78);color:#a7496c;font:700 9px Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;box-shadow:0 8px 14px rgba(150,84,108,.14)}
+
+.frame-text{position:relative;z-index:1;max-width:100%;font:italic 15px Georgia,serif;line-height:1.2;color:#fff;letter-spacing:.02em;text-shadow:0 2px 8px rgba(94,35,58,.24);word-break:break-word}
+
+.memory-label{position:absolute;bottom:7px;left:0;right:0;text-align:center;color:#b66a89;font-size:12px;font-style:italic;z-index:2;padding:0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.memory-add{display:none;position:fixed;z-index:4;bottom:6vh;left:50%;transform:translateX(-50%);border:1px solid #fff;background:rgba(255,255,255,.72);color:#a54c74;border-radius:30px;padding:12px 20px;font:12px Arial,sans-serif;letter-spacing:.06em;box-shadow:0 8px 22px rgba(170,94,127,.12);cursor:pointer;backdrop-filter:blur(10px)}
+
+.memory-add:hover{background:#fff}
+
+.memory-close{position:fixed;top:22px;right:24px;z-index:5;width:42px;height:42px;border-radius:50%;border:1px solid #fff;background:rgba(255,255,255,.7);color:#a54c74;font:24px Arial,sans-serif;cursor:pointer}
+
+.memory-preview{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;padding:clamp(20px,5vw,64px);background:rgba(48,18,35,.82);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+
+.memory-preview.active{display:flex;animation:fadeIn .22s ease both}
+
+.memory-preview-dialog{position:relative;display:flex;flex-direction:column;align-items:center;width:min(94vw,980px);max-height:90vh}
+
+.memory-preview-image{display:block;max-width:100%;max-height:calc(84vh - 40px);width:auto;height:auto;object-fit:contain;border:8px solid #fff;border-radius:5px;background:#32121f;box-shadow:0 28px 80px rgba(22,4,14,.5)}
+
+.memory-preview-caption{margin:14px 0 0;color:#fff7fb;font:italic clamp(16px,2vw,22px) Georgia,serif;text-align:center;text-shadow:0 2px 8px rgba(48,18,35,.55)}
+
+.memory-preview-close{position:absolute;z-index:1;top:-18px;right:-18px;width:43px;height:43px;border:1px solid rgba(255,255,255,.9);border-radius:50%;background:#fff;color:#a54c74;font:26px Arial,sans-serif;line-height:1;cursor:pointer;box-shadow:0 8px 22px rgba(32,5,19,.28)}
+
+.memory-preview-close:hover{background:#ffe7f0}
+
+.bloom-heart{position:absolute;pointer-events:none;color:rgba(239,119,166,.28);font-size:clamp(30px,6vw,78px);filter:blur(.2px);animation:bloom 5s ease-in-out infinite}
+
+.bloom-heart.h1{left:8%;top:20%;animation-delay:-1s}.bloom-heart.h2{right:9%;top:23%;font-size:clamp(40px,8vw,105px);animation-delay:-2.5s}.bloom-heart.h3{left:18%;bottom:14%;font-size:clamp(25px,4vw,58px);animation-delay:-3.2s}.bloom-heart.h4{right:21%;bottom:13%;animation-delay:-.6s}
+
+@keyframes wireMoveRight{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+
+@keyframes bloom{0%,100%{transform:scale(.85);opacity:.25}50%{transform:scale(1.18);opacity:.55}}
+
+@media(max-width:700px){.memories-heading{top:9vh}.memory-track{top:calc(48% - 100px)}.memory-set{gap:22px;padding-right:22px}.memory-card{flex-basis:180px;width:180px;height:196px}.memory-add{display:none}.memory-close{top:14px;right:14px}.memory-preview{padding:20px}.memory-preview-image{border-width:6px;max-height:76vh}.memory-preview-close{top:-15px;right:-10px}}
+
+
+
+
+/* Love note notebook - added without changing existing sections */
+.notebook-launch{position:fixed;top:22px;left:24px;z-index:8;border:1px solid rgba(255,255,255,.95);border-radius:24px;padding:11px 17px;background:rgba(255,255,255,.78);color:#a54c74;font:12px Arial,sans-serif;letter-spacing:.04em;box-shadow:0 8px 22px rgba(170,94,127,.14);cursor:pointer;backdrop-filter:blur(10px)}
+.notebook-launch:hover{background:#fff;transform:translateY(-1px)}
+.notebook-overlay{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(104,45,72,.32);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+.notebook-overlay.active{display:flex;animation:fadeIn .25s ease both}
+.love-notebook{position:relative;width:min(680px,88vw);height:min(500px,72vh);min-height:340px;display:grid;grid-template-columns:1fr 1fr;filter:drop-shadow(0 22px 30px rgba(104,45,72,.25));perspective:1400px}
+.notebook-page{position:relative;min-width:0;padding:34px 28px 46px;background:repeating-linear-gradient(to bottom,#fffdf7 0,#fffdf7 29px,#eadbe0 30px,#fffdf7 31px);border:1px solid #e6d4c8;color:#80536a;overflow:hidden}
+.notebook-page:first-child{border-radius:8px 0 0 8px;border-right:1px solid #d7b8c6;box-shadow:inset -8px 0 15px rgba(130,74,98,.08)}
+.notebook-page:last-child{border-radius:0 8px 8px 0;border-left:1px solid #f0e0e4;box-shadow:inset 8px 0 15px rgba(130,74,98,.06)}
+.notebook-page:before{content:"";position:absolute;top:0;bottom:0;left:24px;width:1px;background:rgba(224,133,163,.42);pointer-events:none}
+.notebook-title{font:italic 22px Georgia,serif;color:#c05b87;margin:0 0 14px;padding-left:7px}
+.notebook-writing{display:block;position:relative;width:100%;height:calc(100% - 43px);resize:none;border:0;outline:0;background:transparent;color:#80536a;font:16px/31px Georgia,serif;padding:0 2px 0 8px;overflow:hidden;white-space:pre-wrap;overflow-wrap:anywhere}
+.notebook-writing:disabled{opacity:1;cursor:default}
+.notebook-writing::placeholder{color:#c59aab}
+.notebook-tools{position:absolute;left:50%;bottom:-22px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;z-index:3;white-space:nowrap}
+.notebook-tool{border:1px solid rgba(255,255,255,.95);border-radius:22px;padding:10px 16px;background:#fff7fb;color:#a54c74;font:12px Arial,sans-serif;box-shadow:0 6px 18px rgba(104,45,72,.15);cursor:pointer}
+.notebook-tool.primary{background:#d95f91;color:#fff;border-color:#d95f91}
+.notebook-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:42px;height:42px;border:1px solid #fff;border-radius:50%;background:rgba(255,255,255,.9);color:#a54c74;font:25px Arial,sans-serif;cursor:pointer;box-shadow:0 7px 18px rgba(104,45,72,.15)}
+.notebook-arrow.left{left:-58px}.notebook-arrow.right{right:-58px}
+.notebook-arrow:disabled{opacity:.35;cursor:not-allowed}
+.notebook-close{position:absolute;top:-16px;right:-16px;z-index:5;width:36px;height:36px;border:1px solid #fff;border-radius:50%;background:#fff;color:#a54c74;font:23px Arial,sans-serif;cursor:pointer;box-shadow:0 5px 15px rgba(104,45,72,.15)}
+.notebook-page-number{position:absolute;bottom:13px;left:0;right:0;text-align:center;color:#bd8ba0;font:11px Arial,sans-serif}
+.notebook-page.flip-forward{animation:pageForward .35s ease}
+.notebook-page.flip-back{animation:pageBack .35s ease}
+@keyframes pageForward{0%{transform:rotateY(0);opacity:1}50%{transform:rotateY(-12deg);opacity:.7}100%{transform:rotateY(0);opacity:1}}
+@keyframes pageBack{0%{transform:rotateY(0);opacity:1}50%{transform:rotateY(12deg);opacity:.7}100%{transform:rotateY(0);opacity:1}}
+@media(max-width:600px){.notebook-launch{top:14px;left:14px;padding:10px 13px}.love-notebook{width:88vw;height:min(440px,67vh);min-height:320px}.notebook-page{padding:26px 16px 42px}.notebook-page:before{left:14px}.notebook-title{font-size:18px}.notebook-writing{font-size:14px;line-height:27px}.notebook-arrow{width:34px;height:34px;font-size:21px}.notebook-arrow.left{left:-15px}.notebook-arrow.right{right:-15px}.notebook-tools{bottom:-20px}.notebook-tool{padding:9px 12px}.notebook-close{top:-12px;right:-8px}}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="background-glow" aria-hidden="true"><div class="glow one"></div><div class="glow two"></div><div class="glow three"></div></div>
+
+<div id="hearts" aria-hidden="true"></div>
+
+<main id="landing">
+
+  <section class="landing" aria-label="A little surprise">
+
+    <div class="eyebrow">A little something from my heart</div>
+
+    <div class="centerpiece">
+
+      <div class="orbit"></div><div class="orbit inner"></div>
+
+      <button class="love-button" id="openVideo" type="button" aria-label="Open your surprise">
+
+        <span class="button-heart">♡</span>
+
+        <span class="button-copy">This is for you <span>my love.</span></span>
+
+      </button>
+
+    </div>
+
+    <div class="hint">✧ &nbsp; TAP TO OPEN YOUR SURPRISE &nbsp; ✧</div>
+
+    <div class="signature">made with love, just for you ♡</div>
+
+  </section>
+
+</main>
+
+<section class="video-screen" id="videoScreen" aria-label="Your video surprise">
+
+  <button class="close-video" id="closeVideo" type="button" aria-label="Close video">×</button>
+
+  <div class="video-frame">
+
+    <video id="surpriseVideo" controls playsinline preload="metadata">
+
+      <source id="videoSource" src="./birthday_animation_cute_expression_sounds.mp4" type="video/mp4">
+
+      Your browser does not support HTML video.
+
+    </video>
+
+    <button id="memoriesButton" type="button" style="display:none;position:absolute;z-index:3;bottom:clamp(18px,5vh,44px);left:50%;transform:translateX(-50%) rotate(-2deg);padding:15px 34px 17px;border:0;color:#6f4c3f;font:italic 24px Georgia,serif;letter-spacing:.04em;cursor:pointer;background:linear-gradient(135deg,#fffdf4,#f5e8c9);box-shadow:0 7px 16px rgba(54,31,25,.22),inset 0 0 0 1px rgba(151,117,80,.18);clip-path:polygon(2% 0,98% 2%,100% 96%,1% 100%);">
+
+      Memories <span aria-hidden="true">♡</span>
+
+    </button>
+
+    <div id="videoError" style="display:none;position:absolute;inset:0;background:#fff0f6;color:#8f3e63;align-items:center;justify-content:center;text-align:center;padding:24px;font:16px Arial,sans-serif;">
+
+      Video file nahi mil rahi. Neeche “Choose video” se MP4 select karo.
+
+      <br><br><label style="display:inline-block;padding:12px 18px;border-radius:24px;background:#d94f88;color:white;cursor:pointer;">Choose video<input id="localVideoPicker" type="file" accept="video/mp4,video/*" style="display:none"></label>
+
+    </div>
+
+  </div>
+
+  <div class="video-caption">For you, always. ♡</div>
+
+</section>
+
+
+
+<section class="memories-screen" id="memoriesScreen" aria-label="Our memories">
+
+  <div class="bloom-heart h1">♥</div><div class="bloom-heart h2">♡</div>
+
+  <div class="bloom-heart h3">♥</div><div class="bloom-heart h4">♡</div>
+
+  <div class="memories-heading"><h1>Our little memories</h1><p>little moments, forever in my heart</p></div>
+  <button class="notebook-launch" id="openNotebook" type="button">♡ Open our note</button>
+  <section class="notebook-overlay" id="notebookOverlay" aria-label="Our love notebook" aria-hidden="true">
+    <div class="love-notebook" role="dialog" aria-modal="true" aria-label="Love note notebook">
+      <button class="notebook-close" id="closeNotebook" type="button" aria-label="Close notebook">×</button>
+      <button class="notebook-arrow left" id="notebookPrev" type="button" aria-label="Previous page">‹</button>
+      <div class="notebook-page" id="notebookLeftPage">
+        <h2 class="notebook-title">A little note for you ♡</h2>
+        <textarea class="notebook-writing" id="notebookLeftText" aria-label="Left notebook page" disabled spellcheck="true">My favourite person,\n\nIf I could keep one moment forever, I would choose any moment with you. You make ordinary days feel special, and my heart feels at home with you. ♡</textarea>
+        <div class="notebook-page-number" id="notebookLeftNumber">Page 1</div>
+      </div>
+      <div class="notebook-page" id="notebookRightPage">
+        <h2 class="notebook-title">Just between us ✧</h2>
+        <textarea class="notebook-writing" id="notebookRightText" aria-label="Right notebook page" disabled spellcheck="true">This little book is for your thoughts, our tiny memories, and all the things you want to say.\n\nWrite anything your heart wants. There is always room for one more page. ♡</textarea>
+        <div class="notebook-page-number" id="notebookRightNumber">Page 2</div>
+      </div>
+      <button class="notebook-arrow right" id="notebookNext" type="button" aria-label="Next page">›</button>
+      <div class="notebook-tools">
+        <button class="notebook-tool primary" id="notebookType" type="button">✎ Type a note</button>
+        <button class="notebook-tool" id="notebookDone" type="button" style="display:none">Done</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="memory-wire"></div>
+
+  <div class="memory-track" id="memoryTrack">
+
+    <div class="memory-set" id="memorySetA">
+
+      <div class="memory-card"><div class="memory-photo">♡</div><div class="memory-label">our first memory</div></div>
+
+      <div class="memory-card"><div class="memory-photo">♡</div><div class="memory-label">little happy moments</div></div>
+
+      <div class="memory-card"><div class="memory-photo">♡</div><div class="memory-label">you & me</div></div>
+
+      <div class="memory-card"><div class="memory-photo">♡</div><div class="memory-label">forever kind of love</div></div>
+
+    </div>
+
+    <div class="memory-set" id="memorySetB" aria-hidden="true"></div>
+
+  </div>
+
+  <label class="memory-add">＋ ADD YOUR PHOTOS<input id="memoryPhotoPicker" type="file" accept="image/*" multiple style="display:none"></label>
+
+  <button class="memory-close" id="closeMemories" aria-label="Back to video">×</button>
+
+</section>
+
+<section class="memory-preview" id="memoryPreview" aria-hidden="true" aria-label="Memory preview">
+
+  <div class="memory-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="memoryPreviewCaption">
+
+    <button class="memory-preview-close" id="closeMemoryPreview" type="button" aria-label="Close image preview">&times;</button>
+
+    <img class="memory-preview-image" id="memoryPreviewImage" alt="">
+
+    <p class="memory-preview-caption" id="memoryPreviewCaption"></p>
+
+  </div>
+
+</section>
+
+
+
+<script>
+
+const heartField = document.getElementById('hearts');
+
+const symbols = ['♡','♥','❤','✧'];
+
+function makeHeart(){
+
+  const el=document.createElement('span');
+
+  el.className='heart';
+
+  el.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+
+  el.style.left=(Math.random()*100)+'%';
+
+  el.style.fontSize=(14+Math.random()*22)+'px';
+
+  el.style.animationDuration=(9+Math.random()*10)+'s';
+
+  el.style.animationDelay=(Math.random()*1.5)+'s';
+
+  heartField.appendChild(el);
+
+  setTimeout(()=>el.remove(),21000);
+
+}
+
+for(let i=0;i<24;i++) setTimeout(makeHeart,i*180);
+
+setInterval(makeHeart,650);
+
+const landing=document.getElementById('landing');
+
+const screen=document.getElementById('videoScreen');
+
+const video=document.getElementById('surpriseVideo');
+
+const videoError = document.getElementById('videoError');
+
+const localVideoPicker = document.getElementById('localVideoPicker');
+
+const memoriesButton = document.getElementById('memoriesButton');
+
+document.getElementById('openVideo').addEventListener('click',async()=>{
+
+  screen.classList.add('active');
+
+  landing.style.visibility='hidden';
+
+  videoError.style.display='none';
+
+  video.load();
+
+  video.currentTime=0;
+
+  memoriesButton.style.display='none';
+
+  try {
+
+    await video.play();
+
+  } catch(e) {
+
+    // If playback cannot start automatically, keep the video controls available.
+
+    console.warn('Video playback did not start automatically:', e);
+
+  }
+
+});
+
+localVideoPicker.addEventListener('change',async(event)=>{
+
+  const file=event.target.files && event.target.files[0];
+
+  if(!file) return;
+
+  const oldUrl=video.dataset.localObjectUrl;
+
+  if(oldUrl) URL.revokeObjectURL(oldUrl);
+
+  const localUrl=URL.createObjectURL(file);
+
+  video.dataset.localObjectUrl=localUrl;
+
+  video.src=localUrl;
+
+  videoError.style.display='none';
+
+  memoriesButton.style.display='none';
+
+  video.load();
+
+  try { await video.play(); }
+
+  catch(e) { video.controls=true; }
+
+});
+
+function closeVideo(){
+
+  video.pause();
+
+  screen.classList.remove('active');
+
+  landing.style.visibility='visible';
+
+}
+
+document.getElementById('closeVideo').addEventListener('click',closeVideo);
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&screen.classList.contains('active'))closeVideo()});
+
+video.addEventListener('ended',()=>{
+
+  memoriesButton.style.display='block';
+
+});
+
+const memoriesScreen=document.getElementById('memoriesScreen');
+
+const memoryTrack=document.getElementById('memoryTrack');
+
+const memorySetA=document.getElementById('memorySetA');
+
+const memorySetB=document.getElementById('memorySetB');
+
+const memoryPhotoPicker=document.getElementById('memoryPhotoPicker');
+
+memoryPhotoPicker.disabled=true;
+
+const memoryFrames=[
+
+  {title:'Naruto & Hinata',image:'https://w0.peakpx.com/wallpaper/33/812/HD-wallpaper-the-last-naruto-movie-romance-manga-kiss-anime-love-hinata-long-hair-night.jpg'},
+
+  {title:'Sasuke & Sakura',image:'https://static.zerochan.net/SasuSaku.full.3272956.jpg'},
+
+  {title:'Kirito & Asuna',image:'https://images7.alphacoders.com/792/792067.png'},
+
+  {title:'Hori & Miyamura',image:'https://anichoice.com/wp-content/uploads/2021/02/main-min-3-scaled.jpg'},
+
+  {title:'Marin & Gojo',image:'https://static.animecorner.me/2025/03/1742717354-e4c9562fe14bebc74fcc4e0310843be1.jpg'},
+
+  {title:'Kaguya & Shirogane',image:'https://assets.telegraphindia.com/telegraph/2025/Feb/1738924693_free-romcom-on-crunchyroll-4.jpg'},
+
+  {title:'Yuta & Rika',image:'https://w0.peakpx.com/wallpaper/699/695/HD-wallpaper-anime-jujutsu-kaisen-yuta-okkotsu-rika-orimoto.jpg'},
+
+  {title:'Tohru & Kyo',image:'https://i2.hdslb.com/bfs/archive/b79e41ca40af5ab99047cd828b8f9450bc284e44.jpg'},
+
+  {title:'Shikimori & Izumi',image:'https://a.storyblok.com/f/178900/1504x846/f553a96fdf/060082e64145edfacecc122c46823b1e1652445818_main.jpg/m/filters%3Aquality%2895%29format%28webp%29'},
+
+  {title:'Nasa & Tsukasa',image:'https://static.animecorner.me/2022/11/tonikawa.png'},
+
+  {title:'Yamada & Akane',image:'https://a.storyblok.com/f/178900/1504x846/b04ca387cf/my-love-story-with-yamada-kun-at-lv999-episode-1.jpg/m/1504x846/filters%3Aquality%28100%29'},
+
+  {title:'Miyo & Kiyoka',image:'https://static.zerochan.net/Watashi.no.Shiawase.na.Kekkon.full.4152162.jpg'},
+
+  {title:'Rudeus & Sylphie',image:'https://s1.zerochan.net/Mushoku.Tensei%3A.Isekai.Ittara.Honki.Dasu.600.4150935.jpg'},
+
+  {title:'Ichikawa & Yamada',image:'https://static.animecorner.me/2023/02/FqBdExdaEAAh9Al-scaled.jpeg'},
+
+  {title:'Sakuta & Mai',image:'https://wallpapersok.com/images/hd/rascal-does-not-dream-of-bunny-girl-senpai-mai-and-sakuta-oa1gmupf43si41zg.jpg'},
+
+  {title:'Tomoya & Nagisa',image:'https://static.zerochan.net/CLANNAD.full.1513077.jpg'},
+
+  {title:'Yuki & Machi',image:'https://gdm-universal-media.b-cdn.net/epicstream/399cdb738e2f6c82312fd02f7779df6fad1fcc16-810x450.jpg'},
+
+  {title:'Inuyasha & Kagome',image:'https://static.zerochan.net/InuYasha.full.2487032.jpg'},
+
+  {title:'Edward & Winry',image:'https://myotakuworld.com/wp-content/uploads/2020/05/Edward-Elric-Winry-Rockbell.jpg'},
+
+  {title:'Zenitsu & Nezuko',image:'https://static.zerochan.net/Kimetsu.no.Yaiba.full.3021434.jpg'},
+
+  {title:'Loid & Yor',image:'https://static.zerochan.net/Spy.%C3%97.Family.full.4096777.jpg'},
+
+  {title:'Deku & Uraraka',image:'https://s1.zerochan.net/Boku.no.Hero.Academia.600.2185892.jpg'},
+
+  {title:'Natsu & Lucy',image:'https://static.zerochan.net/FAIRY.TAIL.1024.3232823.webp'},
+
+  {title:'Asta & Noelle',image:'https://images3.alphacoders.com/117/thumb-1920-1171024.jpg'},
+
+  {title:'Soma & Erina',image:'https://ogre.natalie.mu/media/news/comic/2014/1031/soma.jpg?imdensity=1&imwidth=640'},
+
+  {title:'Takemichi & Hinata',image:'https://images4.alphacoders.com/122/1224440.jpg'},
+
+  {title:'Rin & Isagi',image:'https://s1.zerochan.net/Blue.Lock.600.4342405.jpg'},
+
+  {title:'Komi & Tadano',image:'https://static.zerochan.net/Komi-san.wa.Comyushou.desu..full.4173232.jpg'},
+
+  {title:'Kousei & Kaori',image:'https://www.kimiuso.jp/assets/img/package/box/goods_animate.jpg'},
+
+  {title:'Taiga & Ryuuji',image:'https://static.zerochan.net/Toradora%21.full.242020.jpg'},
+
+  {title:'Yato & Hiyori',image:'https://s1.zerochan.net/Noragami.600.1694071.jpg'},
+
+  {title:'Zero Two & Hiro',image:'https://images7.alphacoders.com/896/896883.png'},
+
+  {title:'Mitsuha & Taki',image:'https://images2.alphacoders.com/790/790472.png'},
+
+  {title:'Hachiman & Yukino',image:'https://i.pinimg.com/736x/bf/de/90/bfde90eb1a699dab43526e3cd941cbac.jpg'},
+
+  {title:'Sailor Moon & Tuxedo Mask',image:'https://static.zerochan.net/Bishoujo.Senshi.Sailor.Moon.full.76970.jpg'},
+
+  {title:'Rem & Subaru',image:'https://images2.alphacoders.com/100/1003989.jpg'},
+
+  {title:'Emilia & Subaru',image:'https://re-zero-anime.jp/assets/bddvd/tv2/8.png'},
+
+  {title:'Kou & Futaba',image:'https://ogre.natalie.mu/media/news/comic/2014/0312/aoharuride_animekey01.jpg?impolicy=twitter_card_feature_crop'},
+
+  {title:'Sawako & Kazehaya',image:'https://static.zerochan.net/Kimi.ni.Todoke.full.3950778.jpg'},
+
+  {title:'Akito & Sana',image:'https://i.pinimg.com/originals/1f/45/94/1f4594ef583c4900695cacc829722e72.jpg'},
+
+  {title:'Anime boy holding a flower',image:'https://i.pinimg.com/736x/77/be/5f/77be5f3d5df39d82a20760e4530275f4.jpg'},
+
+  {title:'Anime girl holding a heart',image:'https://d2o4rrq92x9csx.cloudfront.net/articles/heart-throbbing-illustration_6-8-87-3.webp'},
+
+  {title:'Cute anime boyfriend',image:'https://image.zeta-ai.io/plot-cover-image/9a423d32-5eb7-4788-be36-00421eac6e7f/457ac03a-296a-4570-8596-6c64a84927a6.png'},
+
+  {title:'Cute anime girlfriend',image:'https://avatarfiles.alphacoders.com/250/250941.png'},
+
+  {title:'Blushing anime boy',image:'https://image.zeta-ai.io/plot-cover-image/37e617fc-e70a-438c-adf6-15ad75089d00/956bfc0a-cb4f-4c61-95fa-c4129ded20e6.png'},
+
+  {title:'Blushing anime girl',image:'https://i.pinimg.com/1200x/b0/f3/ff/b0f3ffdfdb033994d2a3e880421fe43f.jpg'},
+
+  {title:'Romantic anime boy',image:'https://morphic.com/images/seo/shoujo-anime-art-ai/characters/princely-senpai.webp'},
+
+  {title:'Romantic anime girl',image:'https://storage.googleapis.com/studio-cms-assets/projects/BRO3x1A4qD/s-1440x1440_v-fms_webp_48c63d37-63d4-4934-84ff-abb528cbfb30.jpg'},
+
+  {title:'Anime couple holding hands',image:'https://pixaii.com/files/preview/1280x698/11761144285r79ltd0puzxpvozhimz1hzlmonpv62gxtnysrcwbe7vhr2jdcmgbhmylxz4lqfoicotnddatfaptxqffctaxeznjjcety5kbncsq.jpg'},
+
+  {title:'Anime couple forehead kiss',image:'https://i.pinimg.com/originals/aa/36/11/aa3611ab3b749cd4ea76558c8987ec9a.jpg'}
+
+];
+
+const pinterestPalette=[['#f7d7e5','#d98db6'],['#fbe7f2','#e39ec8'],['#f6d5f7','#d58bd0'],['#f9e2d8','#e5a58a'],['#dfe7ff','#9bb5ff'],['#d6f7ea','#73c6a8'],['#f6e9c8','#e1b55f'],['#f7d4df','#c36a96']];
+
+
+// Notebook controls: separate add-on for the Memories section.
+const notebookOverlay=document.getElementById('notebookOverlay');
+const notebookType=document.getElementById('notebookType');
+const notebookDone=document.getElementById('notebookDone');
+const notebookPrev=document.getElementById('notebookPrev');
+const notebookNext=document.getElementById('notebookNext');
+const notebookLeftPage=document.getElementById('notebookLeftPage');
+const notebookRightPage=document.getElementById('notebookRightPage');
+const notebookLeftText=document.getElementById('notebookLeftText');
+const notebookRightText=document.getElementById('notebookRightText');
+const notebookPages=[notebookLeftText,notebookRightText];
+let notebookCurrent=0;
+let notebookEditing=false;
+let notebookPageCount=2;
+function syncNotebook(){
+  notebookPrev.disabled=notebookCurrent===0;
+  notebookNext.disabled=notebookCurrent>=notebookPageCount-2;
+  document.getElementById('notebookLeftNumber').textContent='Page '+(notebookCurrent+1);
+  document.getElementById('notebookRightNumber').textContent='Page '+(notebookCurrent+2);
+  notebookLeftText.value=notebookPageText(notebookCurrent);
+  notebookRightText.value=notebookPageText(notebookCurrent+1);
+  notebookLeftText.disabled=!notebookEditing;
+  notebookRightText.disabled=!notebookEditing;
+}
+const notebookContent=new Map([[0,notebookLeftText.value],[1,notebookRightText.value]]);
+function notebookPageText(index){return notebookContent.get(index)||'';}
+function saveNotebookVisiblePages(){notebookContent.set(notebookCurrent,notebookLeftText.value);notebookContent.set(notebookCurrent+1,notebookRightText.value);}
+function flipNotebook(direction){
+  if(notebookEditing) saveNotebookVisiblePages();
+  const next=notebookCurrent+direction*2;
+  if(next<0||next+1>=notebookPageCount)return;
+  notebookCurrent=next;
+  const page=direction>0?notebookRightPage:notebookLeftPage;
+  page.classList.remove('flip-forward','flip-back');
+  void page.offsetWidth;
+  page.classList.add(direction>0?'flip-forward':'flip-back');
+  syncNotebook();
+}
+document.getElementById('openNotebook').addEventListener('click',()=>{
+  notebookOverlay.classList.add('active');notebookOverlay.setAttribute('aria-hidden','false');syncNotebook();
+});
+document.getElementById('closeNotebook').addEventListener('click',()=>{
+  if(notebookEditing)saveNotebookVisiblePages();
+  notebookOverlay.classList.remove('active');notebookOverlay.setAttribute('aria-hidden','true');
+});
+notebookOverlay.addEventListener('click',event=>{if(event.target===notebookOverlay){if(notebookEditing)saveNotebookVisiblePages();notebookOverlay.classList.remove('active');notebookOverlay.setAttribute('aria-hidden','true');}});
+notebookPrev.addEventListener('click',()=>flipNotebook(-1));
+notebookNext.addEventListener('click',()=>flipNotebook(1));
+notebookType.addEventListener('click',()=>{
+  if(!notebookEditing){notebookEditing=true;notebookType.textContent='✎ Writing…';notebookDone.style.display='inline-block';syncNotebook();(notebookCurrent%2===0?notebookLeftText:notebookRightText).focus();}
+});
+notebookDone.addEventListener('click',()=>{saveNotebookVisiblePages();notebookEditing=false;notebookType.textContent='✎ Type a note';notebookDone.style.display='none';syncNotebook();});
+function autoFlipNotebookPage(textarea, pageIndex){
+  if(!notebookEditing)return;
+  const lineHeight=parseFloat(getComputedStyle(textarea).lineHeight)||31;
+  if(textarea.scrollHeight>textarea.clientHeight+lineHeight*0.3){
+    const words=textarea.value.split(/\s+/);
+    const carry=words.pop();
+    textarea.value=words.join(' ');
+    notebookContent.set(pageIndex,textarea.value);
+    const nextIndex=pageIndex+1;
+    if(nextIndex>=notebookPageCount)notebookPageCount=nextIndex+1;
+    notebookContent.set(nextIndex,(carry?carry+' ':'')+(notebookContent.get(nextIndex)||''));
+    if(pageIndex===notebookCurrent){notebookRightText.value=notebookPageText(notebookCurrent+1);}
+    else if(pageIndex===notebookCurrent+1){notebookCurrent+=2;if(notebookCurrent+1>=notebookPageCount)notebookPageCount=notebookCurrent+2;syncNotebook();notebookLeftText.focus();}
+    syncNotebook();
+  }else{notebookContent.set(pageIndex,textarea.value);}
+}
+notebookLeftText.addEventListener('input',()=>autoFlipNotebookPage(notebookLeftText,notebookCurrent));
+notebookRightText.addEventListener('input',()=>autoFlipNotebookPage(notebookRightText,notebookCurrent+1));
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&notebookOverlay.classList.contains('active')){if(notebookEditing)saveNotebookVisiblePages();notebookOverlay.classList.remove('active');notebookOverlay.setAttribute('aria-hidden','true');}});
+
+const memoryPreview=document.getElementById('memoryPreview');
+
+const memoryPreviewImage=document.getElementById('memoryPreviewImage');
+
+const memoryPreviewCaption=document.getElementById('memoryPreviewCaption');
+
+const closeMemoryPreview=document.getElementById('closeMemoryPreview');
+
+
+
+function buildMemoryCard(item,index){
+
+  const card=document.createElement('button');
+
+  card.type='button';
+
+  card.className='memory-card';
+
+  card.dataset.memoryIndex=String(index);
+
+  card.title=`Open ${item.title}`;
+
+  card.setAttribute('aria-label',`Open ${item.title}`);
+
+  const [from,to]=pinterestPalette[index % pinterestPalette.length];
+
+  const photo=document.createElement('div');
+
+  photo.className='memory-photo';
+
+  photo.style.background=`linear-gradient(135deg, ${from}, ${to})`;
+
+  const img=document.createElement('img');
+
+  img.src=item.image;
+
+  img.alt=item.title;
+
+  img.loading=index < 8 ? 'eager' : 'lazy';
+
+  img.decoding='async';
+
+  img.referrerPolicy='no-referrer';
+
+  img.onerror=()=>{card.hidden=true;};
+
+  const label=document.createElement('div');
+
+  label.className='memory-label';
+
+  label.textContent=item.title;
+
+  photo.appendChild(img);
+
+  card.append(photo,label);
+
+  return card;
+
+}
+
+function renderMemoryFrames(){
+
+  memorySetA.innerHTML='';
+
+  memoryFrames.forEach((item,index)=>memorySetA.appendChild(buildMemoryCard(item,index)));
+
+  duplicateMemoryCards();
+
+}
+
+function duplicateMemoryCards(){
+
+  memorySetB.innerHTML=memorySetA.innerHTML;
+
+  memorySetB.querySelectorAll('.memory-card').forEach(card=>card.tabIndex=-1);
+
+}
+
+function openMemoryPreview(item){
+
+  memoryPreviewImage.src=item.image;
+
+  memoryPreviewImage.alt=item.title;
+
+  memoryPreviewCaption.textContent=item.title;
+
+  memoryPreview.classList.add('active');
+
+  memoryPreview.setAttribute('aria-hidden','false');
+
+  memoryTrack.style.animationPlayState='paused';
+
+  closeMemoryPreview.focus();
+
+}
+
+function closeMemoryPreviewDialog(){
+
+  memoryPreview.classList.remove('active');
+
+  memoryPreview.setAttribute('aria-hidden','true');
+
+  memoryPreviewImage.removeAttribute('src');
+
+  memoryPreviewImage.alt='';
+
+  memoryTrack.style.animationPlayState='';
+
+}
+
+memoriesButton.addEventListener('click',()=>{
+
+  screen.classList.remove('active');
+
+  memoriesScreen.classList.add('active');
+
+});
+
+document.getElementById('closeMemories').addEventListener('click',()=>{
+
+  memoriesScreen.classList.remove('active');
+
+  screen.classList.add('active');
+
+});
+
+memoryTrack.addEventListener('click',event=>{
+
+  const card=event.target.closest('.memory-card');
+
+  if(!card || !memoryTrack.contains(card)) return;
+
+  const index=Number(card.dataset.memoryIndex);
+
+  if(Number.isInteger(index) && memoryFrames[index]) openMemoryPreview(memoryFrames[index]);
+
+});
+
+closeMemoryPreview.addEventListener('click',closeMemoryPreviewDialog);
+
+memoryPreview.addEventListener('click',event=>{
+
+  if(event.target===memoryPreview) closeMemoryPreviewDialog();
+
+});
+
+document.addEventListener('keydown',event=>{
+
+  if(event.key==='Escape' && memoryPreview.classList.contains('active')){
+
+    event.preventDefault();
+
+    closeMemoryPreviewDialog();
+
+  }
+
+});
+
+renderMemoryFrames();
+
+memoryPhotoPicker.addEventListener('change',(event)=>{
+
+  const files=Array.from(event.target.files||[]).filter(file=>file.type.startsWith('image/'));
+
+  if(!files.length) return;
+
+  memorySetA.innerHTML='';
+
+  files.forEach((file,index)=>{
+
+    const url=URL.createObjectURL(file);
+
+    const card=document.createElement('div'); card.className='memory-card';
+
+    const photo=document.createElement('div'); photo.className='memory-photo';
+
+    const img=document.createElement('img'); img.src=url; img.alt='Memory '+(index+1);
+
+    photo.appendChild(img);
+
+    const label=document.createElement('div'); label.className='memory-label'; label.textContent='memory '+(index+1)+' ♡';
+
+    card.append(photo,label); memorySetA.appendChild(card);
+
+  });
+
+  duplicateMemoryCards();
+
+  memoryPhotoPicker.value='';
+
+});
+
+video.addEventListener('error',()=>{
+
+  if(screen.classList.contains('active')) videoError.style.display='flex';
+
+  console.warn('Video could not be loaded. Keep the MP4 beside index.html or choose it manually.');
+
+});
+
+</script>
+
+</body>
+
+</html>
